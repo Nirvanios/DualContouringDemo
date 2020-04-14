@@ -36,6 +36,6 @@ add_compile_definitions(
         GLM_ENABLE_EXPERIMENTAL
 )
 
-add_executable(${PROJECT} main.cpp)
+add_executable(${PROJECT} main.cpp shapes.cpp operations.cpp)
 
 target_link_libraries(${PROJECT} geGL::geGL SDL2CPP::SDL2CPP dualcontour)
