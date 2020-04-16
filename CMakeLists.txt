@@ -29,13 +29,17 @@ endif ()
 FetchContent_GetProperties(DCLib)
 if (NOT DClib_POPULATED)
     FetchContent_Populate(DCLib)
-    include_directories(${dclib_SOURCE_DIR} ${dclib_BINARY_DIR})
+    add_subdirectory(${dclib_SOURCE_DIR} ${dclib_BINARY_DIR})
 endif ()
+
+include_directories(ThirdParty)
+include_directories(./)
+include_directories(${dclib_SOURCE_DIR})
 
 add_compile_definitions(
         GLM_ENABLE_EXPERIMENTAL
 )
 
-add_executable(${PROJECT} main.cpp shapes.cpp operations.cpp)
+add_executable(${PROJECT} main.cpp operations.cpp shapes.cpp Utils.cpp )
 
 target_link_libraries(${PROJECT} geGL::geGL SDL2CPP::SDL2CPP dualcontour)

@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/component_wise.hpp>
 
+#include "shapes.h"
+
 namespace Shapes {
 double Cuboid(const glm::vec3 &worldPosition, const glm::vec3 &origin,
               const glm::vec3 &halfDimensions) {
@@ -12,7 +14,7 @@ double Cuboid(const glm::vec3 &worldPosition, const glm::vec3 &origin,
 
   const auto &d = glm::abs(pos) - halfDimensions;
   const float m = glm::compMax(d);
-  return glm::min(m, length(max(d, glm::vec3(0.f))));
+  return glm::min(m, glm::length(glm::max(d, glm::vec3(0.f))));
 }
 
 double Sphere(const glm::vec3 &worldPosition, const glm::vec3 &origin,
