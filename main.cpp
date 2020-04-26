@@ -71,16 +71,27 @@ bool SDLHandler(const SDL_Event &event) {
 }
 
 double Density(const DualContouring::Vector3D &pos) {
+
+//    return Shapes::Cone(glm::make_vec3(pos.data.data()), glm::vec3(0), glm::vec3(1));
+
   return Operations::Intersect(
       Shapes::Cone(glm::make_vec3(pos.data.data()), glm::vec3(0), glm::vec3(1)),
       Shapes::Cuboid(glm::make_vec3(pos.data.data()), glm::vec3(0, 0, 5),
                      glm::vec3(10, 10, 5)));
-  return Shapes::Cuboid(glm::make_vec3(pos.data.data()), glm::vec3(0),
-                        glm::vec3(5));
+
+    return Shapes::Cuboid(glm::make_vec3(pos.data.data()), glm::vec3(0),
+                          glm::vec3(5));
+
   return Operations::Intersect(
       Shapes::Sphere(glm::make_vec3(pos.data.data()), glm::vec3(0), 5),
       Shapes::Sphere(glm::make_vec3(pos.data.data()), glm::vec3(2), 5));
 }
+
+struct VertexObject{
+    glm::vec3 vertex;
+    glm::vec3 normal;
+    glm::vec3 color;
+};
 
 int main() {
   /*Create Window*/
@@ -122,14 +133,18 @@ int main() {
                                  std::array<DualContouring::Vector3D, 2>{
                                      DualContouring::Vector3D(-10, -10, -10),
                                      DualContouring::Vector3D(10, 10, 10)},
-                                 std::array<size_t, 3>{100, 100, 100});
+                                 std::array<size_t, 3>{64, 64, 64});
 
 
-  std::vector<glm::vec3> vertices{};
+  mesh.writeOBJ("model.obj");
+
+  std::vector<VertexObject> vertexObjects{};
   for(const auto &item : mesh.points){
-    vertices.emplace_back(glm::make_vec3(item.data.data()));
+    vertexObjects.emplace_back();
+    auto &back = vertexObjects.back();
+    back.vertex = glm::make_vec3(item.data.data());
   }
-  std::vector<glm::vec3> normals(vertices.size());
+
   std::vector<unsigned int> indices{};
   for (const auto &item : mesh.quads) {
     std::vector tmp(item.begin(), item.end());
@@ -139,32 +154,38 @@ int main() {
     indices.emplace_back(tmp[0]);
     indices.emplace_back(tmp[1]);
     indices.emplace_back(tmp[2]);
-    auto norm = glm::cross(vertices[tmp[1]] - vertices[tmp[0]], vertices[tmp[2]] - vertices[tmp[0]]);
-    normals[tmp[0]] += norm;
-    normals[tmp[1]] += norm;
-    normals[tmp[2]] += norm;
+    auto norm = glm::cross(vertexObjects[tmp[1]].vertex - vertexObjects[tmp[0]].vertex,
+                           vertexObjects[tmp[2]].vertex - vertexObjects[tmp[0]].vertex);
+    vertexObjects[tmp[0]].normal += norm;
+    vertexObjects[tmp[1]].normal += norm;
+    vertexObjects[tmp[2]].normal += norm;
     indices.emplace_back(tmp[0]);
     indices.emplace_back(tmp[2]);
     indices.emplace_back(tmp[3]);
-    norm = glm::cross(vertices[tmp[2]] - vertices[tmp[0]], vertices[tmp[3]] - vertices[tmp[0]]);
-    normals[tmp[0]] += norm;
-    normals[tmp[2]] += norm;
-    normals[tmp[3]] += norm;
+    norm = glm::cross(vertexObjects[tmp[2]].vertex - vertexObjects[tmp[0]].vertex,
+                      vertexObjects[tmp[3]].vertex - vertexObjects[tmp[0]].vertex);
+    vertexObjects[tmp[0]].normal += norm;
+    vertexObjects[tmp[2]].normal += norm;
+    vertexObjects[tmp[3]].normal += norm;
   }
 
-  for(auto &normal : normals){
-    glm::normalize(normal);
+  for(auto &vertexObject : vertexObjects){
+    glm::normalize(vertexObject.normal);
   }
 
 
   auto vbo = std::make_shared<ge::gl::Buffer>(
-      vertices.size() * sizeof(glm::vec3), vertices.data());
+      vertexObjects.size() * sizeof(VertexObject), vertexObjects.data());
   auto vao = std::make_shared<ge::gl::VertexArray>();
-  vao->addAttrib(vbo, 0, 3, GL_FLOAT, static_cast<GLsizei>(sizeof(glm::vec3)));
+  vao->addAttrib(vbo, 0, 3, GL_FLOAT, static_cast<GLsizei>(sizeof(VertexObject)), offsetof(VertexObject, vertex));
+  vao->addAttrib(vbo, 1, 3, GL_FLOAT, static_cast<GLsizei>(sizeof(VertexObject)), offsetof(VertexObject, normal));
   auto ibo = std::make_shared<ge::gl::Buffer>(
       indices.size() * sizeof(unsigned int), indices.data());
 
   ge::gl::glClearColor(255, 255, 255, 1);
+  ge::gl::glEnable(GL_DEPTH_TEST);
+//  ge::gl::glEnable(GL_CULL_FACE);
+  ge::gl::glCullFace(GL_BACK);
 
   mainLoop->setIdleCallback([&]() {
     ge::gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -175,6 +196,7 @@ int main() {
 
     const auto MVP = proj * camera.GetViewMatrix() * model;
     program->setMatrix4fv("MVP", glm::value_ptr(MVP));
+    program->set3fv("camerPos", glm::value_ptr(camera.Position));
 
     ge::gl::glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT,
                            nullptr);
