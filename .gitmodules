@@ -1,0 +1,3 @@
+[submodule "DualContouringSample"]
+	path = DualContouringSample
+	url = https://github.com/nickgildea/DualContouringSample.git
