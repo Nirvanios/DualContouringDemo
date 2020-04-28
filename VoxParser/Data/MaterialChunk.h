@@ -1,0 +1,10 @@
+//
+// Created by Igor Frank on 26.04.20.
+//
+
+#ifndef DUALCONTOURDEMO_MATERIALCHUNK_H
+#define DUALCONTOURDEMO_MATERIALCHUNK_H
+
+class MaterialChunk {};
+
+#endif // DUALCONTOURDEMO_MATERIALCHUNK_H

@@ -14,6 +14,7 @@
 #include "ThirdParty/Camera.h"
 #include "operations.h"
 #include "shapes.h"
+#include <VoxParser/VoxParser.h>
 #include <dc.hh>
 #include <geGL/StaticCalls.h>
 #include <vector3d.hh>
@@ -115,26 +116,23 @@ int main() {
   ge::gl::setHighDebugMessage();
 
   auto vs = std::make_shared<ge::gl::Shader>(
-      GL_VERTEX_SHADER,
-      Utils::readFile(
-          "/home/kuro/CLionProjects/DualContouringDemo/shaders/simple.vert"));
+      GL_VERTEX_SHADER, Utils::readFile<std::string>("/home/kuro/CLionProjects/DualContouringDemo/shaders/simple.vert"));
   auto fs = std::make_shared<ge::gl::Shader>(
-      GL_FRAGMENT_SHADER,
-      Utils::readFile(
-          "/home/kuro/CLionProjects/DualContouringDemo/shaders/simple.frag"));
+      GL_FRAGMENT_SHADER, Utils::readFile<std::string>("/home/kuro/CLionProjects/DualContouringDemo/shaders/simple.frag"));
   auto program = std::make_shared<ge::gl::Program>(vs, fs);
 
   /**
    * Compute Dual Contour
    */
 
-  auto mesh =
-      DualContouring::isosurface(Density, 0.0,
-                                 std::array<DualContouring::Vector3D, 2>{
-                                     DualContouring::Vector3D(-10, -10, -10),
-                                     DualContouring::Vector3D(10, 10, 10)},
-                                 std::array<size_t, 3>{64, 64, 64});
+  auto voxModel = VoxParser::parseFile("../vox/castle.vox");
+  auto size = voxModel.models[0].getModelSize();
 
+  auto mesh =
+      DualContouring::isosurface([voxModel](auto &worldPos) { return voxModel.Density(worldPos); }, 0.0,
+                                 std::array<DualContouring::Vector3D, 2>{DualContouring::Vector3D(-0.5, -0.5, -0.5),
+                                                                         DualContouring::Vector3D(size.x, size.y, size.z)},
+                                 std::array<size_t, 3>{64, 64, 64});
 
   mesh.writeOBJ("model.obj");
 

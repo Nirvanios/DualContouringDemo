@@ -1,0 +1,10 @@
+//
+// Created by Igor Frank on 26.04.20.
+//
+
+#ifndef DUALCONTOURDEMO_PALETTECHUNK_H
+#define DUALCONTOURDEMO_PALETTECHUNK_H
+
+class PaletteChunk {};
+
+#endif // DUALCONTOURDEMO_PALETTECHUNK_H
