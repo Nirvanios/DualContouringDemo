@@ -5,7 +5,7 @@
 #ifndef DUALCONTOURDEMO_VOXPARSER_H
 #define DUALCONTOURDEMO_VOXPARSER_H
 
-#include <VoxParser/Data/MainChunk.h>
+#include <Data/MainChunk.h>
 #include <string>
 #include <vector>
 class VoxParser {

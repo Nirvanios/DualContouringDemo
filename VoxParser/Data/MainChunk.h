@@ -8,7 +8,7 @@
 #include "MaterialChunk.h"
 #include "ModelChunk.h"
 #include "PaletteChunk.h"
-#include <cmake-build-debug/_deps/dclib-src/vector3d.hh>
+#include <vector3d.hh>
 #include <vector>
 class MainChunk {
 public:

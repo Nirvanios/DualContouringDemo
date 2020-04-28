@@ -4,7 +4,6 @@
 
 #include "VoxParser.h"
 #include <Utils.h>
-#include <VoxParser/Data/MainChunk.h>
 #include <vector>
 
 MainChunk VoxParser::parseFile(const std::string &path) {
