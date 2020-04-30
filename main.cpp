@@ -6,8 +6,10 @@
 
 #include "ThirdParty/Camera.h"
 #include <Args.h>
+#include <BaseDualContouring.h>
 #include <DCWindow.h>
 #include <Renderer.h>
+#include <SimpleDualContouring.h>
 #include <VertexObject.h>
 #include <VoxParser.h>
 #include <dc.hh>
@@ -45,66 +47,18 @@ int main(int argc, char **argv) {
   VoxParser::getInstance().loadFile("../vox/castle.vox");
   VoxParser::getInstance().getRoot().models[0].buildOctree();
 
-  VertexBuffer vb;
-  IndexBuffer ib;
+  args.method = args.method.has_value() ? args.method.value() : MethodType::SIMPLE;
 
-  auto root = BuildOctree(glm::ivec3(-1), 32, -1.f);
-  GenerateMeshFromOctree(root, vb, ib);
-
-  //  auto mesh =
-  //      DualContouring::isosurface([voxModel](auto &worldPos) { return voxModel.Density(worldPos); }, 0.0,
-  //                                 std::array<DualContouring::Vector3D, 2>{DualContouring::Vector3D(-0.5, -0.5, -0.5),
-  //                                                                         DualContouring::Vector3D(size.x, size.y, size.z)},
-  //                                 std::array<size_t, 3>{64, 64, 64});
-  //
-  //  mesh.writeOBJ("model.obj");
-  //
-
-  std::vector<VertexObject> vertexObjects{};
-  std::vector<unsigned int> indices{};
-
-  for (const auto vertex : vb) {
-    vertexObjects.emplace_back(vertex.xyz, vertex.normal);
-  }
-  for (const auto index : ib) {
-    indices.emplace_back(index);
+  auto dualContouring = BaseDualContouring::CreateInstance(args.method.value());
+  if (args.method.value() == MethodType::SIMPLE) {
+    dynamic_cast<SimpleDualContouring *>(dualContouring.get())->setDensity([](DualContouring::Vector3D pos) -> double {
+      return VoxParser::getInstance().getRoot().Density(pos);
+    });
   }
 
-  //  for(const auto &item : mesh.points){
-  //    vertexObjects.emplace_back();
-  //    auto &back = vertexObjects.back();
-  //    back.vertex = glm::make_vec3(item.data.data());
-  //  }
-  //
+  dualContouring->computeMesh();
 
-  //  for (const auto &item : mesh.quads) {
-  //    std::vector tmp(item.begin(), item.end());
-  //    for (auto &i : tmp) {
-  //      i -= 1;
-  //    }
-  //    indices.emplace_back(tmp[0]);
-  //    indices.emplace_back(tmp[1]);
-  //    indices.emplace_back(tmp[2]);
-  //    auto norm = glm::cross(vertexObjects[tmp[1]].vertex - vertexObjects[tmp[0]].vertex,
-  //                           vertexObjects[tmp[2]].vertex - vertexObjects[tmp[0]].vertex);
-  //    vertexObjects[tmp[0]].normal += norm;
-  //    vertexObjects[tmp[1]].normal += norm;
-  //    vertexObjects[tmp[2]].normal += norm;
-  //    indices.emplace_back(tmp[0]);
-  //    indices.emplace_back(tmp[2]);
-  //    indices.emplace_back(tmp[3]);
-  //    norm = glm::cross(vertexObjects[tmp[2]].vertex - vertexObjects[tmp[0]].vertex,
-  //                      vertexObjects[tmp[3]].vertex - vertexObjects[tmp[0]].vertex);
-  //    vertexObjects[tmp[0]].normal += norm;
-  //    vertexObjects[tmp[2]].normal += norm;
-  //    vertexObjects[tmp[3]].normal += norm;
-  //  }
-  //
-  //  for(auto &vertexObject : vertexObjects){
-  //    glm::normalize(vertexObject.normal);
-  //  }
-
-  renderer.fillBuffers(vertexObjects, indices);
+  renderer.fillBuffers(dualContouring->getVertices(), dualContouring->getIndices());
 
   window.setLoopCallback([&]() { renderer.drawFrame(); });
 

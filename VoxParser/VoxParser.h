@@ -15,7 +15,7 @@ public:
 
 private:
   VoxParser() = default;
-  ;
+
   MainChunk root{};
 
 public:

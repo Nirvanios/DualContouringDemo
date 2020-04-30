@@ -5,12 +5,12 @@
 #ifndef DUALCONTOURDEMO_ARGS_H
 #define DUALCONTOURDEMO_ARGS_H
 
+#include <MethodType.h>
 #include <optional>
 #include <string>
-class Args {
-private:
-  enum class MethodType { SIMPLE, REGULAR };
 
+class Args {
+public:
   std::string runPath;
   std::optional<MethodType> method;
   std::optional<std::string> inputFile;
@@ -18,7 +18,6 @@ private:
   bool visualize = false;
   bool help = false;
 
-public:
   Args() = default;
   void parseArgs(int argc, char **argv);
   static std::string getHelp();

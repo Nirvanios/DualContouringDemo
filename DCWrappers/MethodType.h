@@ -1,0 +1,10 @@
+//
+// Created by Igor Frank on 30.04.20.
+//
+
+#ifndef DUALCONTOURDEMO_METHODTYPE_H
+#define DUALCONTOURDEMO_METHODTYPE_H
+
+enum class MethodType { SIMPLE, REGULAR };
+
+#endif // DUALCONTOURDEMO_METHODTYPE_H
