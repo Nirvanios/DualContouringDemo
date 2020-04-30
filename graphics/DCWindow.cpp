@@ -10,7 +10,7 @@ DCWindow::DCWindow(Camera &camera, unsigned int width, unsigned int height) : ca
 
 void DCWindow::init() {
   mainLoop = std::make_shared<sdl2cpp::MainLoop>();
-  mainLoop->setEventHandler(std::bind(&DCWindow::SDLHandler, this, std::placeholders::_1));
+  mainLoop->setEventHandler([this](const SDL_Event &event) -> bool { return SDLHandler(event); });
   if (width == 0 || height == 0) {
     getWindowSize();
   }
@@ -62,13 +62,6 @@ bool DCWindow::SDLHandler(const SDL_Event &event) {
     return true;
   }
   return false;
-}
-
-void DCWindow::setLoopCallback(const std::function<void(void)> &F) {
-  mainLoop->setIdleCallback([=]() {
-    F();
-    window->swap();
-  });
 }
 
 unsigned int DCWindow::getWidth() const { return width; }

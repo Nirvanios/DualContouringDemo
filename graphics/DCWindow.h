@@ -9,6 +9,9 @@
 #include <SDL2/include/SDL2/SDL_events.h>
 #include <SDL2CPP/MainLoop.h>
 #include <SDL2CPP/Window.h>
+
+template <typename F> concept SimpleInvocable = std::is_invocable_v<F>;
+
 class DCWindow {
   using SDL2MainLoop = std::shared_ptr<sdl2cpp::MainLoop>;
   using SDL2Window = std::shared_ptr<sdl2cpp::Window>;
@@ -30,7 +33,13 @@ public:
 
   [[nodiscard]] unsigned int getWidth() const;
   [[nodiscard]] unsigned int getHeight() const;
-  void setLoopCallback(const std::function<void(void)> &F);
+
+  template <SimpleInvocable T> void setLoopCallback(const T &func) {
+    mainLoop->setIdleCallback([=]() {
+      func();
+      window->swap();
+    });
+  };
 
   void operator()();
 };
