@@ -8,8 +8,7 @@
 #include "shapes.h"
 
 namespace Shapes {
-double Cuboid(const glm::vec3 &worldPosition, const glm::vec3 &origin,
-              const glm::vec3 &halfDimensions) {
+double Cuboid(const glm::vec3 &worldPosition, const glm::vec3 &origin, const glm::vec3 &halfDimensions) {
   const auto &pos = worldPosition - origin;
 
   const auto &d = glm::abs(pos) - halfDimensions;
@@ -17,26 +16,20 @@ double Cuboid(const glm::vec3 &worldPosition, const glm::vec3 &origin,
   return glm::min(m, glm::length(glm::max(d, glm::vec3(0.f))));
 }
 
-double Sphere(const glm::vec3 &worldPosition, const glm::vec3 &origin,
-              float radius) {
+double Sphere(const glm::vec3 &worldPosition, const glm::vec3 &origin, float radius) {
   return glm::length(worldPosition - origin) - radius;
 }
 
-double Elipsoid(const glm::vec3 &worldPosition, const glm::vec3 &origin,
-                const glm::vec3 &constants) {
+double Elipsoid(const glm::vec3 &worldPosition, const glm::vec3 &origin, const glm::vec3 &constants) {
   const auto &pos = worldPosition - origin;
 
-  return glm::compAdd(glm::pow(pos, glm::vec3(2)) /
-                      glm::pow(constants, glm::vec3(2))) -
-         1;
+  return glm::compAdd(glm::pow(pos, glm::vec3(2)) / glm::pow(constants, glm::vec3(2))) - 1;
 }
 
-double Cone(const glm::vec3 &worldPosition, const glm::vec3 &origin,
-            const glm::vec3 &constants) {
+double Cone(const glm::vec3 &worldPosition, const glm::vec3 &origin, const glm::vec3 &constants) {
   const auto &pos = worldPosition - origin;
 
-  const auto inter =
-      glm::pow(pos, glm::vec3(2)) / glm::pow(constants, glm::vec3(2));
+  const auto inter = glm::pow(pos, glm::vec3(2)) / glm::pow(constants, glm::vec3(2));
 
   return inter.x + inter.y - inter.z;
 }

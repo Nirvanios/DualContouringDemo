@@ -17,6 +17,7 @@ public:
   std::vector<MaterialChunk> material{};
 
   double Density(const DualContouring::Vector3D &pos) const;
+  double Density(const glm::vec3 &pos) const;
 };
 
 #endif // DUALCONTOURDEMO_MAINCHUNK_H

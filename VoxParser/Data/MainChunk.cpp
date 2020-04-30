@@ -9,11 +9,18 @@
 #include <operations.h>
 #include <shapes.h>
 
-double MainChunk::Density(const DualContouring::Vector3D &pos) const {
+double MainChunk::Density(const DualContouring::Vector3D &pos) const { return Density(glm::make_vec3(pos.data.data())); }
+
+double MainChunk::Density(const glm::vec3 &pos) const {
   double result = std::numeric_limits<double>::max();
+  std::vector<int> neighbours{-1, 0, 1};
   for (const auto &model : this->models) {
-    for (const auto &voxel : model.getVoxels()) {
-      result = Operations::Union(result, Shapes::Cuboid(glm::make_vec3(pos.data.data()), voxel.pos, glm::vec3(0.5)));
+    for (const auto &z : neighbours) {
+      for (const auto &y : neighbours) {
+        for (const auto &x : neighbours) {
+          result = Operations::Union(result, model.density(pos, pos + glm::vec3(x, y, z)));
+        }
+      }
     }
   }
   return result;

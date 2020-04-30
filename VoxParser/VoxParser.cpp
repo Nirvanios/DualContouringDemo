@@ -6,7 +6,7 @@
 #include <Utils.h>
 #include <vector>
 
-MainChunk VoxParser::parseFile(const std::string &path) {
+void VoxParser::loadFile(const std::string &path) {
 
   auto rawData = Utils::readFile<std::vector<unsigned char>>(path);
   auto it = rawData.begin();
@@ -17,12 +17,9 @@ MainChunk VoxParser::parseFile(const std::string &path) {
   if (!checkMainChunk(it, rawData.size())) {
     throw std::runtime_error("Bad .vox MAIN chunk.");
   }
-  MainChunk root{};
-  if (!parseChunks(it, itEnd, root)) {
+  if (!parseChunks(it, itEnd)) {
     throw std::runtime_error("Bad .vox MAIN chunk structure.");
   }
-
-  return root;
 }
 
 bool VoxParser::checkHeader(std::vector<unsigned char>::iterator &it) {
@@ -46,8 +43,7 @@ bool VoxParser::checkMainChunk(std::vector<unsigned char>::iterator &it, int byt
   int byteChildrens = getInt(it);
   return chunkId == "MAIN" && byteContents == 0 && byteChildrens + 20 == bytesCount;
 }
-bool VoxParser::parseChunks(std::vector<unsigned char>::iterator &it, std::vector<unsigned char>::iterator &itEnd,
-                            MainChunk &root) {
+bool VoxParser::parseChunks(std::vector<unsigned char>::iterator &it, std::vector<unsigned char>::iterator &itEnd) {
   int numVoxels = 0;
   while (it != itEnd) {
     auto chunkType = getString(it);
@@ -90,7 +86,6 @@ bool VoxParser::parseChunks(std::vector<unsigned char>::iterator &it, std::vecto
       break;
     }
   }
-
   return true;
 }
 std::string VoxParser::getString(std::vector<unsigned char>::iterator &it, int length) {
@@ -124,3 +119,9 @@ VoxParser::chunkType VoxParser::string2enum(const std::string &type) {
     return chunkType::LAYR;
   return chunkType ::UNKNOWN;
 }
+
+VoxParser &VoxParser::getInstance() {
+  static VoxParser instance;
+  return instance;
+}
+MainChunk &VoxParser::getRoot() { return root; }

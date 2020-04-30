@@ -2,21 +2,15 @@
 // Created by Igor Frank on 14.04.20.
 //
 
-#include <limits>
-
-#include <SDL2CPP/Window.h>
-#include <geGL/StaticCalls.h>
-#include <geGL/geGL.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "ThirdParty/Camera.h"
-#include "simpleCSG/operations.h"
-#include "simpleCSG/shapes.h"
+#include <Args.h>
+#include <DCWindow.h>
+#include <Renderer.h>
+#include <VertexObject.h>
 #include <VoxParser.h>
 #include <dc.hh>
-#include <geGL/StaticCalls.h>
 #include <vector3d.hh>
 
 #include "ThirdParty/DualContouringSample/DualContouringSample/mesh.h"
@@ -24,100 +18,37 @@
 
 #include "misc/Utils.h"
 
-Camera camera(glm::vec3(0));
+int main(int argc, char **argv) {
+  auto args = Args();
 
-std::pair<unsigned int, unsigned int> getWindowSize() {
-  SDL_DisplayMode DM;
-  if (SDL_GetDesktopDisplayMode(0, &DM) != 0) {
-    throw std::runtime_error("SDL_GetDesktopDisplayMode failed");
+  try {
+    args.parseArgs(argc, argv);
+  } catch (std::invalid_argument &e) {
+    std::cout << e.what();
+    std::cout << Args::getHelp();
+    return (1);
   }
-  const auto w = static_cast<unsigned int>(DM.w * 0.8);
-  const auto h = static_cast<unsigned int>(DM.h * 0.8);
-  return {w, h};
-}
 
-bool SDLHandler(const SDL_Event &event) {
-  static bool mousePressed = false;
-  if (event.type == SDL_KEYDOWN) {
-    switch (event.key.keysym.sym) {
-    case SDLK_UP:
-    case SDLK_w:
-      camera.ProcessKeyboard(Camera_Movement::FORWARD, 0.1);
-      return true;
-    case SDLK_DOWN:
-    case SDLK_s:
-      camera.ProcessKeyboard(Camera_Movement::BACKWARD, 0.1);
-      return true;
-    case SDLK_LEFT:
-    case SDLK_a:
-      camera.ProcessKeyboard(Camera_Movement::LEFT, 0.1);
-      return true;
-    case SDLK_RIGHT:
-    case SDLK_d:
-      camera.ProcessKeyboard(Camera_Movement::RIGHT, 0.1);
-      return true;
-    default:
-      return false;
-    }
-  } else if (event.type == SDL_MOUSEBUTTONDOWN and event.button.button == SDL_BUTTON_LEFT) {
-    mousePressed = true;
-    return true;
-  } else if (event.type == SDL_MOUSEMOTION and mousePressed) {
-    camera.ProcessMouseMovement(-event.motion.xrel, event.motion.yrel);
-    return true;
-  } else if (event.type == SDL_MOUSEBUTTONUP and event.button.button == SDL_BUTTON_LEFT) {
-    mousePressed = false;
-    return true;
-  }
-  return false;
-}
+  auto camera = Camera(glm::vec3(0));
 
-struct VertexObject {
-  VertexObject(const vec3 &vertex, const vec3 &normal, const vec3 &color = glm::vec3(0))
-      : vertex(vertex), normal(normal), color(color) {}
-
-  glm::vec3 vertex;
-  glm::vec3 normal;
-  glm::vec3 color;
-};
-
-int main() {
   /*Create Window*/
-  auto mainLoop = std::make_shared<sdl2cpp::MainLoop>();
-  mainLoop->setEventHandler(SDLHandler);
-  const auto fieldOfView = 45.f;
-  const auto [windowWidth, windowHeight] = getWindowSize();
-  const auto nearPlane = 0.1f;
-  const auto farPlane = 100.f;
-  const auto proj =
-      glm::perspective(glm::radians(fieldOfView), static_cast<float>(windowWidth) / windowHeight, nearPlane, farPlane);
-  const auto model = glm::mat4(1.0);
-
-  auto window = std::make_shared<sdl2cpp::Window>(windowWidth, windowHeight);
-  window->createContext("rendering");
-  mainLoop->addWindow("mainWindow", window);
+  auto window = DCWindow(camera);
+  window.init();
 
   /*init OpenGL*/
-  ge::gl::init(SDL_GL_GetProcAddress);
-  ge::gl::setHighDebugMessage();
-
-  auto vs = std::make_shared<ge::gl::Shader>(
-      GL_VERTEX_SHADER, Utils::readFile<std::string>("/home/kuro/CLionProjects/DualContouringDemo/shaders/simple.vert"));
-  auto fs = std::make_shared<ge::gl::Shader>(
-      GL_FRAGMENT_SHADER, Utils::readFile<std::string>("/home/kuro/CLionProjects/DualContouringDemo/shaders/simple.frag"));
-  auto program = std::make_shared<ge::gl::Program>(vs, fs);
+  auto renderer = Renderer(window.getWidth(), window.getHeight(), camera);
 
   /**
    * Compute Dual Contour
    */
 
-  //  auto voxModel = VoxParser::parseFile("../vox/castle.vox");
-  //  auto size = voxModel.models[0].getModelSize();
+  VoxParser::getInstance().loadFile("../vox/castle.vox");
+  VoxParser::getInstance().getRoot().models[0].buildOctree();
 
   VertexBuffer vb;
   IndexBuffer ib;
 
-  auto root = BuildOctree(glm::ivec3(-64 / 2), 64, -1.f);
+  auto root = BuildOctree(glm::ivec3(-1), 32, -1.f);
   GenerateMeshFromOctree(root, vb, ib);
 
   //  auto mesh =
@@ -173,35 +104,9 @@ int main() {
   //    glm::normalize(vertexObject.normal);
   //  }
 
-  auto vbo = std::make_shared<ge::gl::Buffer>(vertexObjects.size() * sizeof(VertexObject), vertexObjects.data());
-  auto vao = std::make_shared<ge::gl::VertexArray>();
-  vao->addAttrib(vbo, 0, 3, GL_FLOAT, static_cast<GLsizei>(sizeof(VertexObject)), offsetof(VertexObject, vertex));
-  vao->addAttrib(vbo, 1, 3, GL_FLOAT, static_cast<GLsizei>(sizeof(VertexObject)), offsetof(VertexObject, normal));
-  auto ibo = std::make_shared<ge::gl::Buffer>(indices.size() * sizeof(unsigned int), indices.data());
+  renderer.fillBuffers(vertexObjects, indices);
 
-  ge::gl::glClearColor(255, 255, 255, 1);
-  ge::gl::glEnable(GL_DEPTH_TEST);
-  //  ge::gl::glEnable(GL_CULL_FACE);
-  ge::gl::glCullFace(GL_BACK);
+  window.setLoopCallback([&]() { renderer.drawFrame(); });
 
-  mainLoop->setIdleCallback([&]() {
-    ge::gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    program->use();
-
-    vao->bind();
-    ibo->bind(GL_ELEMENT_ARRAY_BUFFER);
-
-    const auto MVP = proj * camera.GetViewMatrix() * model;
-    program->setMatrix4fv("MVP", glm::value_ptr(MVP));
-    program->set3fv("camerPos", glm::value_ptr(camera.Position));
-
-    ge::gl::glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
-
-    vao->unbind();
-    ibo->unbind(GL_ELEMENT_ARRAY_BUFFER);
-
-    window->swap();
-  });
-
-  (*mainLoop)();
+  window();
 }

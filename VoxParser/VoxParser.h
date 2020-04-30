@@ -10,13 +10,22 @@
 #include <vector>
 class VoxParser {
 public:
-  static MainChunk parseFile(const std::string &path);
+  void loadFile(const std::string &path);
+  static VoxParser &getInstance();
+
+private:
+  VoxParser() = default;
+  ;
+  MainChunk root{};
+
+public:
+  MainChunk &getRoot();
 
 private:
   enum chunkType { UNKNOWN, MAIN, SIZE, PACK, XYZI, RGBA, MATT, nTRN, nGRP, nSHP, MATL, LAYR };
   static bool checkHeader(std::vector<unsigned char>::iterator &it);
   static bool checkMainChunk(std::vector<unsigned char>::iterator &it, int bytesCount);
-  static bool parseChunks(std::vector<unsigned char>::iterator &it, std::vector<unsigned char>::iterator &itEnd, MainChunk &root);
+  bool parseChunks(std::vector<unsigned char>::iterator &it, std::vector<unsigned char>::iterator &itEnd);
   static int getInt(std::vector<unsigned char>::iterator &it);
   static std::string getString(std::vector<unsigned char>::iterator &it, int length = 4);
   static chunkType string2enum(const std::string &type);

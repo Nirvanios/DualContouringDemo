@@ -32,6 +32,7 @@ if (NOT DClib_POPULATED)
     add_subdirectory(${dclib_SOURCE_DIR} ${dclib_BINARY_DIR})
 endif ()
 
+include_directories(graphics)
 include_directories(ThirdParty)
 include_directories(misc)
 include_directories(simpleCSG)
@@ -39,6 +40,7 @@ include_directories(VoxParser)
 include_directories(VoxParser/Data)
 include_directories(${dclib_SOURCE_DIR})
 
+file(GLOB_RECURSE graphics_src "graphics/*.cpp")
 file(GLOB_RECURSE voxparser_src "VoxParser/*.cpp")
 file(GLOB_RECURSE voxparserdata_src "VoxParser/data/*.cpp")
 file(GLOB_RECURSE misc_src "misc/*.cpp")
@@ -57,6 +59,6 @@ add_compile_definitions(
         GLM_ENABLE_EXPERIMENTAL
 )
 
-add_executable(${PROJECT} main.cpp ${voxparser_src} ${voxparserdata_src} ${octreeDC_src} ${misc_src} ${simpleCSG_src})
+add_executable(${PROJECT} main.cpp ${graphics_src} ${voxparser_src} ${voxparserdata_src} ${octreeDC_src} ${misc_src} ${simpleCSG_src})
 
 target_link_libraries(${PROJECT} geGL::geGL SDL2CPP::SDL2CPP dualcontour)

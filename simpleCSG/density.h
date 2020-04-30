@@ -7,11 +7,14 @@
 
 #include "operations.h"
 #include "shapes.h"
+#include <VoxParser.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector3d.hh>
 
 double Density_Func(const glm::vec3 &pos) {
+
+  return VoxParser::getInstance().getRoot().Density(pos);
 
   //    return Shapes::Cone(glm::make_vec3(pos.data.data()), glm::vec3(0), glm::vec3(1));
 
