@@ -6,7 +6,7 @@ layout(location=2) in vec3 fragCameraPosition;
 
 void main() {
 
-    const float ambientStrength = 0.1f;
+    const float ambientStrength = 0.4f;
     const vec3 lightColor = vec3(1.0f);
     const vec3 lightPosition = vec3(15.0f, 15.0f, 15.0f);
     const float specularStrength = 0.5f;

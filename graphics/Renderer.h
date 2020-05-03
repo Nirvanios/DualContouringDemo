@@ -31,7 +31,7 @@ private:
   Camera &camera;
   const float fieldOfView = 45.f;
   const float nearPlane = 0.1f;
-  const float farPlane = 100.f;
+  const float farPlane = 1000.f;
   const glm::mat4 modelMat = glm::mat4(1.0);
   glm::mat4 projectionMat;
 

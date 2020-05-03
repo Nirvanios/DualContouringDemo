@@ -34,19 +34,19 @@ bool DCWindow::SDLHandler(const SDL_Event &event) {
     switch (event.key.keysym.sym) {
     case SDLK_UP:
     case SDLK_w:
-      camera.ProcessKeyboard(Camera_Movement::FORWARD, 0.1);
+      camera.ProcessKeyboard(Camera_Movement::FORWARD, 0.4);
       return true;
     case SDLK_DOWN:
     case SDLK_s:
-      camera.ProcessKeyboard(Camera_Movement::BACKWARD, 0.1);
+      camera.ProcessKeyboard(Camera_Movement::BACKWARD, 0.4);
       return true;
     case SDLK_LEFT:
     case SDLK_a:
-      camera.ProcessKeyboard(Camera_Movement::LEFT, 0.1);
+      camera.ProcessKeyboard(Camera_Movement::LEFT, 0.4);
       return true;
     case SDLK_RIGHT:
     case SDLK_d:
-      camera.ProcessKeyboard(Camera_Movement::RIGHT, 0.1);
+      camera.ProcessKeyboard(Camera_Movement::RIGHT, 0.4);
       return true;
     default:
       return false;

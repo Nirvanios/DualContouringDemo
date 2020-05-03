@@ -33,4 +33,19 @@ double Cone(const glm::vec3 &worldPosition, const glm::vec3 &origin, const glm::
 
   return inter.x + inter.y - inter.z;
 }
+double Cylinder(const glm::vec3 &worldPosition, const glm::vec3 &origin, const glm::vec3 &constants, Axis parallelTo) {
+  auto pos = worldPosition;
+  switch (parallelTo) {
+  case Axis::X:
+    pos.x = 0;
+    break;
+  case Axis::Y:
+    pos.y = 0;
+    break;
+  case Axis::Z:
+    pos.z = 0;
+    break;
+  }
+  return Elipsoid(pos, origin, constants);
+}
 } // namespace Shapes

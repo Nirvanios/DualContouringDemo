@@ -6,6 +6,7 @@
 #define DUALCONTOURDEMO_UTILS_H
 
 #include <fstream>
+#include <glm/vec3.hpp>
 #include <iostream>
 #include <string>
 

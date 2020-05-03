@@ -10,11 +10,6 @@
 #include <functional>
 
 class SimpleDualContouring : public BaseDualContouring {
-private:
-  std::function<double(const DualContouring::Point3D &)> density;
-
-public:
-  void setDensity(const std::function<double(const DualContouring::Point3D &)> &density);
 
 public:
   void computeMesh() override;

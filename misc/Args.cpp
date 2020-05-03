@@ -27,8 +27,7 @@ void Args::parseArgs(int argc, char **argv) {
       if (method.has_value())
         throw std::invalid_argument("Duplicate \"-m=XXX\" argument!");
       method = MethodType::REGULAR;
-    }
-    if (tmp == "-v") {
+    } else if (tmp == "-v") {
       visualize = true;
     } else {
       throw std::invalid_argument("Unknown argument " + std::string(argv[i]) + " !");

@@ -23,12 +23,23 @@ public:
 
 private:
   glm::uvec3 modelSize;
+  glm::mat3 rotation = glm::mat3(1.0);
+
+public:
+  const glm::mat3 &getRotation() const;
+  void setRotation(const glm::mat3 &rotation);
+  const glm::vec3 &getTranslation() const;
+  void setTranslation(const glm::vec3 &translation);
+
+private:
+  glm::vec3 translation = glm::vec3(0);
 
 public:
   [[nodiscard]] const glm::uvec3 &getModelSize() const;
   [[nodiscard]] const std::vector<Voxel> &getVoxels() const;
   void addVoxel(const glm::vec3 &position, const unsigned int &colorIndex);
   void buildOctree();
+  void applyTransformation();
   double density(const glm::vec3 &worldPos, const glm::vec3 &searchPos) const;
 
 private:

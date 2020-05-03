@@ -29,7 +29,7 @@ int cnt(const Node &nd) {
 void ModelChunk::buildOctree() {
   auto size = pow(2, ceil(log(glm::compMax(modelSize)) / log(2)));
 
-  octreeRoot = Node(false, size, glm::vec3(0));
+  octreeRoot = Node(false, 32, glm::vec3(-16));
 
   for (const auto &voxel : voxels) {
     octreeRoot.addNode(voxel.pos);
@@ -39,4 +39,13 @@ void ModelChunk::buildOctree() {
 
 double ModelChunk::density(const glm::vec3 &worldPos, const glm::vec3 &searchPos) const {
   return octreeRoot.density(worldPos, searchPos);
+}
+const glm::mat3 &ModelChunk::getRotation() const { return rotation; }
+void ModelChunk::setRotation(const glm::mat3 &rotation) { ModelChunk::rotation = rotation * ModelChunk::rotation; }
+const glm::vec3 &ModelChunk::getTranslation() const { return translation; }
+void ModelChunk::setTranslation(const glm::vec3 &translation) { ModelChunk::translation = translation + ModelChunk::translation; }
+void ModelChunk::applyTransformation() {
+  for (auto &voxel : voxels) {
+    voxel.pos = rotation * (voxel.pos + translation);
+  }
 }

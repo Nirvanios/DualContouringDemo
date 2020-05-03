@@ -5,6 +5,7 @@
 #include "BaseDualContouring.h"
 #include "RegularDualContouring.h"
 #include "SimpleDualContouring.h"
+#include <Utils.h>
 #include <fstream>
 #include <glm/gtx/string_cast.hpp>
 #include <sstream>
@@ -20,10 +21,10 @@ void BaseDualContouring::saveOBJfile(const std::string &path) {
 
   auto indexSize = indices.size();
   for (const auto &vertex : vertices) {
-    objVertices << "v " << glm::to_string(vertex.vertex) << std::endl;
+    objVertices << "v " << vertex.vertex.x << ' ' << vertex.vertex.y << ' ' << vertex.vertex.z << std::endl;
   }
   for (auto i = 0; i < indexSize; i += 3) {
-    objIndices << "i " << indices[i] << ' ' << indices[i + 1] << ' ' << indices[i + 2] << ' ' << std::endl;
+    objIndices << "f " << indices[i] + 1 << ' ' << indices[i + 1] + 1 << ' ' << indices[i + 2] + 1 << ' ' << std::endl;
   }
   file << objVertices.rdbuf() << objIndices.rdbuf();
 }

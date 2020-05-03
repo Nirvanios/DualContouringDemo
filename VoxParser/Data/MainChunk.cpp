@@ -14,7 +14,12 @@ double MainChunk::Density(const DualContouring::Vector3D &pos) const { return De
 double MainChunk::Density(const glm::vec3 &pos) const {
   double result = std::numeric_limits<double>::max();
   std::vector<int> neighbours{-1, 0, 1};
+  auto i = 0;
   for (const auto &model : this->models) {
+    if (i == 0) {
+      ++i;
+      // continue;
+    }
     for (const auto &z : neighbours) {
       for (const auto &y : neighbours) {
         for (const auto &x : neighbours) {

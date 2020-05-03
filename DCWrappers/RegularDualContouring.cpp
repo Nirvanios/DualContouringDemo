@@ -6,7 +6,7 @@
 #include <DualContouringSample/DualContouringSample/octree.h>
 
 void RegularDualContouring::computeMesh() {
-  root = BuildOctree(glm::ivec3(-1), 32, -1.f);
+  root = BuildOctree(glm::ivec3(-17), 32, 0.1f);
   GenerateMeshFromOctree(root, vb, ib);
 
   std::for_each(vb.begin(), vb.end(), [this](const MeshVertex &v) { vertices.emplace_back(v.xyz, v.normal); });

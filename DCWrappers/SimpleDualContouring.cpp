@@ -4,11 +4,12 @@
 
 #include "SimpleDualContouring.h"
 #include <dc.hh>
+#include <density.h>
 #include <glm/gtc/type_ptr.hpp>
 void SimpleDualContouring::computeMesh() {
   // TODO get whole size
   auto mesh = DualContouring::isosurface(
-      [this](auto &worldPos) { return density(worldPos); }, 0.0,
+      Density_FuncDC, 0.0,
       std::array<DualContouring::Vector3D, 2>{DualContouring::Vector3D(-0.5, -0.5, -0.5), DualContouring::Vector3D(32, 32, 32)},
       std::array<size_t, 3>{64, 64, 64});
 
@@ -40,7 +41,4 @@ void SimpleDualContouring::computeMesh() {
   for (auto &vertexObject : vertices) {
     glm::normalize(vertexObject.normal);
   }
-}
-void SimpleDualContouring::setDensity(const std::function<double(const DualContouring::Point3D &)> &density) {
-  SimpleDualContouring::density = density;
 }
