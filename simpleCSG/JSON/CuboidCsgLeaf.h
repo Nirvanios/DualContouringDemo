@@ -8,7 +8,7 @@
 #include "BaseCsgShape.h"
 class CuboidCsgLeaf : public BaseCsgShape {
 public:
-  CuboidCsgLeaf(ShapeType shapeType, const glm::vec3 &origin, const glm::vec3 &halfDimensions);
+  CuboidCsgLeaf(const glm::vec3 &origin, const glm::vec3 &halfDimensions);
   double getDensity(const glm::vec3 &pos) override;
 
 private:

@@ -6,9 +6,11 @@
 #define DUALCONTOURDEMO_SHAPES_H
 
 #include <glm/glm.hpp>
+#include <string>
 
 namespace Shapes {
 enum class Axis { X, Y, Z };
+Axis string2enum(const std::string &axis);
 
 double Cuboid(const glm::vec3 &worldPosition, const glm::vec3 &origin, const glm::vec3 &halfDimensions);
 double Sphere(const glm::vec3 &worldPosition, const glm::vec3 &origin, float radius);

@@ -6,6 +6,7 @@
 #define DUALCONTOURDEMO_JSONLOADER_H
 
 #include "BaseCsgNode.h"
+#include "OperationCsgNode.h"
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -24,6 +25,8 @@ private:
   std::unique_ptr<BaseCsgNode> getOperand(const nlohmann::basic_json<> &json);
   RootNode root;
   bool jsonLoaded = false;
+  OperationCsgNode::OperationType string2enumOp(const std::string &type);
+  BaseCsgShape::ShapeType string2enumShape(const std::string &type);
 };
 
 #endif // DUALCONTOURDEMO_JSONLOADER_H

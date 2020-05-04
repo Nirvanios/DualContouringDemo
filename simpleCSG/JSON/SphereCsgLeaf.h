@@ -8,7 +8,7 @@
 #include "BaseCsgShape.h"
 class SphereCsgLeaf : public BaseCsgShape {
 public:
-  explicit SphereCsgLeaf(ShapeType shapeType, const glm::vec3 &origin, float radius);
+  explicit SphereCsgLeaf(const glm::vec3 &origin, float radius);
 
 public:
   double getDensity(const glm::vec3 &pos) override;

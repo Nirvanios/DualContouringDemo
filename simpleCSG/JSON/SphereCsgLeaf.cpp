@@ -5,5 +5,5 @@
 #include "SphereCsgLeaf.h"
 #include <shapes.h>
 double SphereCsgLeaf::getDensity(const glm::vec3 &pos) { return Shapes::Sphere(pos, origin, radius); }
-SphereCsgLeaf::SphereCsgLeaf(ShapeType shapeType, const glm::vec3 &origin, float radius)
-    : BaseCsgShape(shapeType, origin), radius(radius) {}
+SphereCsgLeaf::SphereCsgLeaf(const glm::vec3 &origin, float radius)
+    : BaseCsgShape(SphereCsgLeaf::ShapeType::SPHERE, origin), radius(radius) {}

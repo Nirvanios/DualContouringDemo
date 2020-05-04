@@ -48,4 +48,12 @@ double Cylinder(const glm::vec3 &worldPosition, const glm::vec3 &origin, const g
   }
   return Elipsoid(pos, origin, constants);
 }
+Axis string2enum(const std::string &axis) {
+  if (axis == "X")
+    return Axis::X;
+  if (axis == "Y")
+    return Axis::Y;
+  if (axis == "Z")
+    return Axis::Z;
+}
 } // namespace Shapes
