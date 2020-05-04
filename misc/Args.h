@@ -10,12 +10,16 @@
 #include <optional>
 #include <string>
 
+#include <glm/glm.hpp>
+
 class Args {
 public:
   std::string runPath;
   std::optional<MethodType> method;
   std::optional<std::filesystem::path> inputFile;
   std::optional<std::filesystem::path> outputFile;
+  glm::vec3 origin{-32};
+  glm::vec3 size{64};
   bool visualize = false;
   bool help = false;
 

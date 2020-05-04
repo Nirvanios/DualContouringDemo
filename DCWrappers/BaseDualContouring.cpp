@@ -10,7 +10,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <sstream>
 
-BaseDualContouring::BaseDualContouring() {}
+BaseDualContouring::BaseDualContouring(const glm::vec3 &origin, const glm::vec3 &size) : origin(origin), size(size) {}
 const std::vector<VertexObject> &BaseDualContouring::getVertices() const { return vertices; }
 const std::vector<unsigned int> &BaseDualContouring::getIndices() const { return indices; }
 void BaseDualContouring::saveOBJfile(const std::string &path) {
@@ -28,11 +28,12 @@ void BaseDualContouring::saveOBJfile(const std::string &path) {
   }
   file << objVertices.rdbuf() << objIndices.rdbuf();
 }
-std::unique_ptr<BaseDualContouring> BaseDualContouring::CreateInstance(MethodType type) {
+std::unique_ptr<BaseDualContouring> BaseDualContouring::CreateInstance(MethodType type, const glm::vec3 &origin,
+                                                                       const glm::vec3 &size) {
   switch (type) {
   case MethodType::SIMPLE:
-    return std::make_unique<SimpleDualContouring>();
+    return std::make_unique<SimpleDualContouring>(origin, size);
   case MethodType::REGULAR:
-    return std::make_unique<RegularDualContouring>();
+    return std::make_unique<RegularDualContouring>(origin, size);
   }
 }

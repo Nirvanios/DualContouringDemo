@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   args.method = args.method.has_value() ? args.method.value() : MethodType::REGULAR;
 
-  auto dualContouring = BaseDualContouring::CreateInstance(args.method.value());
+  auto dualContouring = BaseDualContouring::CreateInstance(args.method.value(), args.origin, args.size);
 
   dualContouring->computeMesh();
 

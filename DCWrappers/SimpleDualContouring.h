@@ -12,6 +12,9 @@
 class SimpleDualContouring : public BaseDualContouring {
 
 public:
+  SimpleDualContouring(const glm::vec3 &origin, const glm::vec3 &size);
+
+public:
   void computeMesh() override;
 };
 

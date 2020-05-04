@@ -42,3 +42,4 @@ void SimpleDualContouring::computeMesh() {
     glm::normalize(vertexObject.normal);
   }
 }
+SimpleDualContouring::SimpleDualContouring(const glm::vec3 &origin, const glm::vec3 &size) : BaseDualContouring(origin, size) {}

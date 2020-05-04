@@ -29,6 +29,14 @@ void Args::parseArgs(int argc, char **argv) {
       method = MethodType::REGULAR;
     } else if (tmp == "-v") {
       visualize = true;
+    } else if (tmp == "-go") {
+      origin.x = std::stof(argv[++i]);
+      origin.y = std::stof(argv[++i]);
+      origin.z = std::stof(argv[++i]);
+    } else if (tmp == "-gs") {
+      size.x = std::stof(argv[++i]);
+      size.y = std::stof(argv[++i]);
+      size.z = std::stof(argv[++i]);
     } else {
       throw std::invalid_argument("Unknown argument " + std::string(argv[i]) + " !");
     }
