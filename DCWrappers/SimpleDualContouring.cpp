@@ -7,11 +7,17 @@
 #include <density.h>
 #include <glm/gtc/type_ptr.hpp>
 void SimpleDualContouring::computeMesh() {
-  // TODO get whole size
-  auto mesh = DualContouring::isosurface(
-      Density_FuncDC, 0.0,
-      std::array<DualContouring::Vector3D, 2>{DualContouring::Vector3D(-0.5, -0.5, -0.5), DualContouring::Vector3D(32, 32, 32)},
-      std::array<size_t, 3>{64, 64, 64});
+  if (VoxParser::getInstance().isFileLoaded()) {
+    computeModelSize();
+  }
+  auto sizeTo2 = roundSizeToPower2();
+  auto bb = origin + static_cast<float>(sizeTo2);
+  auto mesh =
+      DualContouring::isosurface(Density_FuncDC, 0.0,
+                                 std::array<DualContouring::Vector3D, 2>{DualContouring::Vector3D(origin.x, origin.y, origin.z),
+                                                                         DualContouring::Vector3D(bb.x, bb.y, bb.z)},
+                                 std::array<size_t, 3>{static_cast<unsigned long>(sizeTo2), static_cast<unsigned long>(sizeTo2),
+                                                       static_cast<unsigned long>(sizeTo2)});
 
   for (const auto &item : mesh.points) {
     vertices.emplace_back(glm::make_vec3(item.data.data()));

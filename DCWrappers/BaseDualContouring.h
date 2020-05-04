@@ -17,6 +17,9 @@ protected:
   glm::vec3 origin;
   glm::vec3 size;
 
+  void computeModelSize();
+  int roundSizeToPower2();
+
 public:
   [[nodiscard]] const std::vector<VertexObject> &getVertices() const;
   [[nodiscard]] const std::vector<unsigned int> &getIndices() const;
