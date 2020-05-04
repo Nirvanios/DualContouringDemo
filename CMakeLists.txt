@@ -1,14 +1,25 @@
 cmake_minimum_required(VERSION 3.15)
 set(PROJECT DualContourDemo)
+
+include("cmake/HunterGate.cmake")
+HunterGate(
+        URL "https://github.com/cpp-pm/hunter/archive/v0.23.244.tar.gz"
+        SHA1 "2c0f491fd0b80f7b09e3d21adb97237161ef9835"
+)
+
 project(${PROJECT})
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -fconcepts")
 include(FetchContent)
 
+
 set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL2/lib/cmake/SDL2)
 
 find_package(SDL2 CONFIG REQUIRED)
+
+hunter_add_package(nlohmann_json)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 FetchContent_Declare(SDL2CPP GIT_REPOSITORY https://github.com/dormon/SDL2CPP.git)
 FetchContent_Declare(geGL GIT_REPOSITORY https://github.com/dormon/geGL.git)
@@ -55,12 +66,10 @@ FOREACH (item ${octreeDC_src})
 ENDFOREACH (item)
 
 
-message(STATUS ${octreeDC_src})
-
 add_compile_definitions(
         GLM_ENABLE_EXPERIMENTAL
 )
 
 add_executable(${PROJECT} main.cpp ${dcwrappers_src} ${graphics_src} ${voxparser_src} ${voxparserdata_src} ${octreeDC_src} ${misc_src} ${simpleCSG_src})
 
-target_link_libraries(${PROJECT} geGL::geGL SDL2CPP::SDL2CPP dualcontour)
+target_link_libraries(${PROJECT} geGL::geGL SDL2CPP::SDL2CPP dualcontour nlohmann_json::nlohmann_json)

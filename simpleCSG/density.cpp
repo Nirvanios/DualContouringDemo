@@ -1,4 +1,5 @@
 #include "density.h"
+#include <JSON/JsonLoader.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <optional>
 #include <vector3d.hh>
@@ -9,13 +10,19 @@ double Density_FuncDC(const DualContouring::Vector3D &pos) { return Density_Func
 double Density_Func(const glm::vec3 &pos) {
 
   static std::optional<bool> isVoxModel;
+  static std::optional<bool> isJsonFile;
 
   if (!isVoxModel.has_value()) {
     isVoxModel = VoxParser::getInstance().isFileLoaded();
   }
+  if (!isJsonFile.has_value()) {
+    isJsonFile = JsonLoader::getInstance().isJsonLoaded();
+  }
 
   if (isVoxModel.value()) {
     return VoxParser::getInstance().getRoot().Density(pos);
+  } else if (isJsonFile.value()) {
+    return JsonLoader::getInstance().getRoot()->getDensity(pos);
   } else
     return Shapes::Cuboid(pos, glm::vec3(0), glm::vec3(5));
 

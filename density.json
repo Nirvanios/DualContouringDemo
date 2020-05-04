@@ -1,0 +1,26 @@
+{
+  "node": "Operation",
+  "type": "Union",
+  "operand1": {
+    "node": "Cuboid",
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "halfDimensions": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+    }
+  },
+  "operand2": {
+    "node": "Sphere",
+    "origin": {
+      "x": 3,
+      "y": 3,
+      "z": 3
+    },
+    "radius": 5
+  }
+}

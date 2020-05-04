@@ -8,6 +8,7 @@
 #include <Args.h>
 #include <BaseDualContouring.h>
 #include <DCWindow.h>
+#include <JSON/JsonLoader.h>
 #include <Renderer.h>
 #include <VoxParser.h>
 #include <vector3d.hh>
@@ -16,6 +17,8 @@
 
 int main(int argc, char **argv) {
   auto args = Args();
+
+  JsonLoader::getInstance().loadFile("../density.json");
 
   try {
     args.parseArgs(argc, argv);
