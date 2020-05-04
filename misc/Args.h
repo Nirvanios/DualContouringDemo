@@ -6,6 +6,7 @@
 #define DUALCONTOURDEMO_ARGS_H
 
 #include <MethodType.h>
+#include <filesystem>
 #include <optional>
 #include <string>
 
@@ -13,8 +14,8 @@ class Args {
 public:
   std::string runPath;
   std::optional<MethodType> method;
-  std::optional<std::string> inputFile;
-  std::optional<std::string> outputFile;
+  std::optional<std::filesystem::path> inputFile;
+  std::optional<std::filesystem::path> outputFile;
   bool visualize = false;
   bool help = false;
 

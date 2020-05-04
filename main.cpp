@@ -18,21 +18,29 @@
 int main(int argc, char **argv) {
   auto args = Args();
 
-  JsonLoader::getInstance().loadFile("../density.json");
-
   try {
     args.parseArgs(argc, argv);
   } catch (std::invalid_argument &e) {
     std::cout << e.what();
     std::cout << Args::getHelp();
-    return (1);
+    return 1;
   }
 
-  if (args.inputFile.has_value()) {
-    VoxParser::getInstance().loadFile(args.inputFile.value());
-    for (auto &model : VoxParser::getInstance().getRoot().models) {
-      model.buildOctree();
+  try {
+    if (args.inputFile.has_value()) {
+      if (args.inputFile->extension() == ".vox") {
+        VoxParser::getInstance().loadFile(args.inputFile.value());
+        for (auto &model : VoxParser::getInstance().getRoot().models) {
+          model.buildOctree();
+        }
+      } else if (args.inputFile->extension() == ".json") {
+        JsonLoader::getInstance().loadFile(args.inputFile.value());
+      } else
+        throw std::runtime_error("Unknown file extension, expected .json or .vox got " + args.inputFile->extension().string());
     }
+  } catch (std::exception &e) {
+    std::cerr << e.what();
+    return 1;
   }
 
   args.method = args.method.has_value() ? args.method.value() : MethodType::REGULAR;
