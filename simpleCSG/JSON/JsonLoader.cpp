@@ -4,11 +4,11 @@
 
 #include "JsonLoader.h"
 #include "ConeCsgShape.h"
-#include "CuboidCsgLeaf.h"
+#include "CuboidCsgShape.h"
 #include "CylinderCsgShape.h"
-#include "ElipsoidCsgLeaf.h"
+#include "ElipsoidCsgShape.h"
 #include "OperationCsgNode.h"
-#include "SphereCsgLeaf.h"
+#include "SphereCsgShape.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <shapes.h>
@@ -35,11 +35,11 @@ std::unique_ptr<BaseCsgNode> JsonLoader::getOperand(const nlohmann::json &json) 
   if (node == "Cuboid") {
     auto halfDimObj = json.at("halfDimensions");
     auto halfDim = glm::vec3(halfDimObj.at("x"), halfDimObj.at("y"), halfDimObj.at("z"));
-    return std::make_unique<CuboidCsgLeaf>(origin, halfDim);
+    return std::make_unique<CuboidCsgShape>(origin, halfDim);
   }
   if (node == "Sphere") {
     auto radius = json.at("radius");
-    return std::make_unique<SphereCsgLeaf>(origin, radius);
+    return std::make_unique<SphereCsgShape>(origin, radius);
   }
   if (node == "Cone") {
     auto constantsObj = json.at("Constants");
@@ -49,7 +49,7 @@ std::unique_ptr<BaseCsgNode> JsonLoader::getOperand(const nlohmann::json &json) 
   if (node == "Elipsoid") {
     auto constantsObj = json.at("Constants");
     auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
-    return std::make_unique<ElipsoidCsgLeaf>(origin, constants);
+    return std::make_unique<ElipsoidCsgShape>(origin, constants);
   }
   if (node == "Cylinder") {
     auto constantsObj = json.at("Constants");
