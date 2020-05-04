@@ -4,11 +4,15 @@
 
 #include "VoxParser.h"
 #include <Utils.h>
+#include <filesystem>
 #include <map>
 #include <sstream>
 #include <vector>
 
 void VoxParser::loadFile(const std::string &path) {
+  if (!std::filesystem::exists(path)) {
+    throw std::runtime_error("File \"" + path + "\" does not exist!");
+  }
 
   auto rawData = Utils::readFile<std::vector<unsigned char>>(path);
   auto it = rawData.begin();

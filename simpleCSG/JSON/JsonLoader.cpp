@@ -9,11 +9,16 @@
 #include "ElipsoidCsgShape.h"
 #include "OperationCsgNode.h"
 #include "SphereCsgShape.h"
+#include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <shapes.h>
 
 void JsonLoader::loadFile(const std::string &path) {
+  if (!std::filesystem::exists(path)) {
+    throw std::runtime_error("File \"" + path + "\" does not exist!");
+  }
+
   std::ifstream file(path);
   nlohmann::json jsonFile;
   file >> jsonFile;
