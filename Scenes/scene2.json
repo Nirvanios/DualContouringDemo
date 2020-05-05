@@ -1,0 +1,47 @@
+{
+  "node": "Operation",
+  "type": "Difference",
+  "operand1": {
+    "node": "Operation",
+    "type": "Union",
+    "operand1": {
+      "node": "Shape",
+      "type": "Cuboid",
+      "origin": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "halfDimensions": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      }
+    },
+    "operand2": {
+      "node": "Shape",
+      "type": "Cylinder",
+      "origin": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "constants": {
+        "x": 5,
+        "y": 5,
+        "z": 5
+      },
+      "axis": "Y"
+    }
+  },
+  "operand2": {
+    "node": "Shape",
+    "type": "Sphere",
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "radius": 10
+  }
+}

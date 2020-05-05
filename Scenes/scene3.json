@@ -1,0 +1,43 @@
+{
+  "node": "Operation",
+  "type": "Union",
+  "operand1": {
+    "node": "Operation",
+    "type": "Intersect",
+    "operand1": {
+      "node": "Shape",
+      "type": "Sphere",
+      "origin": {
+        "x": -5,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 20
+    },
+    "operand2": {
+      "node": "Shape",
+      "type": "Sphere",
+      "origin": {
+        "x": 5,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 20
+    }
+  },
+  "operand2": {
+    "node": "Shape",
+    "type": "Cylinder",
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "constants": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+    },
+    "axis": "X"
+  }
+}
