@@ -18,6 +18,7 @@ public:
   std::optional<MethodType> method;
   std::optional<std::filesystem::path> inputFile;
   std::optional<std::filesystem::path> outputFile;
+  std::optional<float> threshold;
   glm::vec3 origin{-32};
   glm::vec3 size{64};
   bool visualize = false;

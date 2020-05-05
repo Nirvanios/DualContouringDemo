@@ -9,6 +9,7 @@
 #include <BaseDualContouring.h>
 #include <DCWindow.h>
 #include <JSON/JsonLoader.h>
+#include <RegularDualContouring.h>
 #include <Renderer.h>
 #include <VoxParser.h>
 #include <vector3d.hh>
@@ -21,9 +22,18 @@ int main(int argc, char **argv) {
   try {
     args.parseArgs(argc, argv);
   } catch (std::invalid_argument &e) {
-    std::cout << e.what();
+    if (std::string(e.what()) == "stof") {
+      std::cerr << "Bad numerical value in args." << std::endl;
+    } else {
+      std::cerr << e.what() << std::endl;
+    }
     std::cout << Args::getHelp();
     return 1;
+  }
+
+  if (args.help) {
+    std::cout << Args::getHelp();
+    return 0;
   }
 
   try {
@@ -46,6 +56,10 @@ int main(int argc, char **argv) {
   args.method = args.method.has_value() ? args.method.value() : MethodType::REGULAR;
 
   auto dualContouring = BaseDualContouring::CreateInstance(args.method.value(), args.origin, args.size);
+
+  if (args.threshold.has_value() && args.method == MethodType::REGULAR) {
+    dynamic_cast<RegularDualContouring *>(dualContouring.get())->setThreshold(args.threshold.value());
+  }
 
   dualContouring->computeMesh();
 

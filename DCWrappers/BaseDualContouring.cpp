@@ -7,7 +7,6 @@
 #include "SimpleDualContouring.h"
 #include <Utils.h>
 #include <VoxParser.h>
-#include <fstream>
 #include <glm/gtx/component_wise.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <sstream>

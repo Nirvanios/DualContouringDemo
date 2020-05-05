@@ -17,9 +17,12 @@ private:
   IndexBuffer ib{};
   OctreeNode *root = nullptr;
 
+  float threshold = 0.1;
+
 public:
   virtual ~RegularDualContouring();
   void computeMesh() override;
+  void setThreshold(float threshold);
 };
 
 #endif // DUALCONTOURDEMO_REGULARDUALCONTOURING_H

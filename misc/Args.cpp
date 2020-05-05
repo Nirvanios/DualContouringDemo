@@ -37,12 +37,24 @@ void Args::parseArgs(int argc, char **argv) {
       size.x = std::stof(argv[++i]);
       size.y = std::stof(argv[++i]);
       size.z = std::stof(argv[++i]);
+    } else if (tmp == "-t") {
+      if (threshold.has_value())
+        throw std::invalid_argument("Duplicate \"-t\" argument!");
+      threshold = std::stof(argv[++i]);
     } else {
       throw std::invalid_argument("Unknown argument " + std::string(argv[i]) + " !");
     }
   }
 }
 std::string Args::getHelp() {
-  std::string help("TODO");
+  std::string help("Demo app for extracting surface from volumetric data.\n"
+                   "Usage:\n"
+                   "\t-in [input_file_path] (.vox or JSON)\n"
+                   "\t-out [input_file_path] (.obj file)\n"
+                   "\t-v toggle visualization\n"
+                   "\t-m=[REGULAR/SIMPLE] chooses which method to use (REGULAR is deafult)\n"
+                   "\t-t [float] threshold for QEF solver in REGUALR method\n"
+                   "\t-go [float float float] grid origin for DC compute\n"
+                   "\t-gs [float float float] size of grid for DC compute\n");
   return help;
 }
