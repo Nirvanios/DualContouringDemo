@@ -40,8 +40,9 @@ int main(int argc, char **argv) {
     if (args.inputFile.has_value()) {
       if (args.inputFile->extension() == ".vox") {
         VoxParser::getInstance().loadFile(args.inputFile.value());
+        auto [size, origin] = VoxParser::getInstance().getRoot().getSceneParam();
         for (auto &model : VoxParser::getInstance().getRoot().models) {
-          model.buildOctree();
+          model.buildOctree(origin, size);
         }
       } else if (args.inputFile->extension() == ".json") {
         JsonLoader::getInstance().loadFile(args.inputFile.value());

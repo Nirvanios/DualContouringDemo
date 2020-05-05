@@ -30,3 +30,17 @@ double MainChunk::Density(const glm::vec3 &pos) const {
   }
   return result;
 }
+
+std::pair<glm::vec3, glm::vec3> MainChunk::getSceneParam() {
+  auto max = glm::vec3(-std::numeric_limits<float>::max());
+  auto min = glm::vec3(std::numeric_limits<float>::max());
+  for (const auto &model : models) {
+    auto c1 = model.getRotation() * model.getTranslation();
+    auto c2 = model.getRotation() * (static_cast<glm::vec3>(model.getModelSize()) + model.getTranslation());
+    max = glm::max(max, c1);
+    max = glm::max(max, c2);
+    min = glm::min(min, c1);
+    min = glm::min(min, c2);
+  }
+  return {glm::vec3(glm::abs(max - min)) + glm::vec3(1), min - 1.f};
+}

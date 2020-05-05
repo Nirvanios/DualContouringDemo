@@ -16,7 +16,9 @@ public:
   std::vector<PaletteChunk> palettes{};
   std::vector<MaterialChunk> material{};
 
-  double Density(const DualContouring::Vector3D &pos) const;
+  std::pair<glm::vec3, glm::vec3> getSceneParam();
+
+  [[nodiscard]] double Density(const DualContouring::Vector3D &pos) const;
   double Density(const glm::vec3 &pos) const;
 };
 

@@ -13,7 +13,7 @@ void RegularDualContouring::computeMesh() {
     computeModelSize();
   }
 
-  root = BuildOctree(glm::ivec3(origin), roundSizeToPower2(), threshold);
+  root = BuildOctree(glm::ivec3(origin), roundSizeToPower2(), -1.f);
   GenerateMeshFromOctree(root, vb, ib);
 
   std::for_each(vb.begin(), vb.end(), [this](const MeshVertex &v) { vertices.emplace_back(v.xyz, v.normal); });

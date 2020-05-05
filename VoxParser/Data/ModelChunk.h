@@ -38,7 +38,7 @@ public:
   [[nodiscard]] const glm::uvec3 &getModelSize() const;
   [[nodiscard]] const std::vector<Voxel> &getVoxels() const;
   void addVoxel(const glm::vec3 &position, const unsigned int &colorIndex);
-  void buildOctree();
+  void buildOctree(const glm::vec3 &origin, const glm::vec3 &size);
   void applyTransformation();
   double density(const glm::vec3 &worldPos, const glm::vec3 &searchPos) const;
 

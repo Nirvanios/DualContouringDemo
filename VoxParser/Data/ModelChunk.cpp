@@ -26,15 +26,14 @@ int cnt(const Node &nd) {
   return sm;
 }
 
-void ModelChunk::buildOctree() {
-  auto size = pow(2, ceil(log(glm::compMax(modelSize)) / log(2)));
+void ModelChunk::buildOctree(const glm::vec3 &origin, const glm::vec3 &size) {
+  auto sizeTo2 = pow(2, ceil(log(glm::compMax(size)) / log(2)));
 
-  octreeRoot = Node(false, 32, glm::vec3(-16));
+  octreeRoot = Node(false, sizeTo2, origin);
 
   for (const auto &voxel : voxels) {
     octreeRoot.addNode(voxel.pos);
   }
-  // octreeRoot.simplify();
 }
 
 double ModelChunk::density(const glm::vec3 &worldPos, const glm::vec3 &searchPos) const {
