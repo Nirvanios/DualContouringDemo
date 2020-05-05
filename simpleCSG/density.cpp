@@ -22,6 +22,7 @@ double Density_Func(const glm::vec3 &pos) {
   if (isVoxModel.value()) {
     return VoxParser::getInstance().getRoot().Density(pos);
   } else if (isJsonFile.value()) {
+    // return Shapes::Cylinder(pos, glm::vec3(0), glm::vec3(10), Shapes::Axis::X);
     return JsonLoader::getInstance().getRoot()->getDensity(pos);
   } else
     return Shapes::Cuboid(pos, glm::vec3(0), glm::vec3(5));

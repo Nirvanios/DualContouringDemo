@@ -1,0 +1,10 @@
+{
+  "node": "Shape",
+  "type": "Sphere",
+  "origin": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "radius": 5
+}

@@ -1,0 +1,15 @@
+{
+  "node": "Shape",
+  "type": "Cylinder",
+  "origin": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "constants": {
+    "x": 10,
+    "y": 10,
+    "z": 10
+  },
+  "axis": "X"
+}

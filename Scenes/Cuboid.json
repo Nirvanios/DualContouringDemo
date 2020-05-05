@@ -1,0 +1,14 @@
+{
+  "node": "Shape",
+  "type": "Elipsoid",
+  "origin": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "constants": {
+    "x": 0.1,
+    "y": 0.5,
+    "z": 0.1
+  }
+}

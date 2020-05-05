@@ -13,7 +13,7 @@ public:
 
 public:
   double getDensity(const glm::vec3 &pos) override;
-  const glm::vec3 &constants;
+  glm::vec3 constants;
   Shapes::Axis parallelTo;
 };
 
