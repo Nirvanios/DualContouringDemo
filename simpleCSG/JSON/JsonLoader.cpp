@@ -49,19 +49,19 @@ std::unique_ptr<BaseCsgNode> JsonLoader::getOperand(const nlohmann::json &json) 
       return std::make_unique<SphereCsgShape>(origin, radius);
     }
     if (type == BaseCsgShape::ShapeType::CONE) {
-      auto constantsObj = json.at("Constants");
+      auto constantsObj = json.at("constants");
       auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
       return std::make_unique<ConeCsgShape>(origin, constants);
     }
     if (type == BaseCsgShape::ShapeType::ELIPSOID) {
-      auto constantsObj = json.at("Constants");
+      auto constantsObj = json.at("constants");
       auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
       return std::make_unique<ElipsoidCsgShape>(origin, constants);
     }
     if (type == BaseCsgShape::ShapeType::CYLINDER) {
-      auto constantsObj = json.at("Constants");
+      auto constantsObj = json.at("constants");
       auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
-      auto axis = json.at("Axis");
+      auto axis = json.at("axis");
       return std::make_unique<CylinderCsgShape>(origin, constants, Shapes::string2enum(axis));
     }
   }
