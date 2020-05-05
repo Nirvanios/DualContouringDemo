@@ -29,7 +29,7 @@ Renderer::Renderer(unsigned int windowWidth, unsigned int windowHeight, Camera &
   ge::gl::glClearColor(255, 255, 255, 1);
   ge::gl::glEnable(GL_DEPTH_TEST);
   // ge::gl::glEnable(GL_CULL_FACE);
-  ge::gl::glCullFace(GL_BACK);
+  // ge::gl::glCullFace(GL_BACK);
 }
 
 void Renderer::fillVertexBuffer(const std::vector<VertexObject> &vertices) {
