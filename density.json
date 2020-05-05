@@ -5,7 +5,8 @@
     "node": "Operation",
     "type": "Union",
     "operand1": {
-      "node": "Cuboid",
+      "node": "Shape",
+      "type": "Cuboid",
       "origin": {
         "x": 0,
         "y": 0,
@@ -18,7 +19,8 @@
       }
     },
     "operand2": {
-      "node": "Sphere",
+      "node": "Shape",
+      "type": "Sphere",
       "origin": {
         "x": 3,
         "y": 3,
@@ -28,7 +30,8 @@
     }
   },
   "operand2": {
-    "node": "Cuboid",
+    "node": "Shape",
+    "type": "Cuboid",
     "origin": {
       "x": 4,
       "y": 3,

@@ -35,32 +35,35 @@ std::unique_ptr<BaseCsgNode> JsonLoader::getOperand(const nlohmann::json &json) 
     (*newNode).op2 = getOperand(json.at("operand2"));
     return newNode;
   }
-  auto originObject = json.at("origin");
-  auto origin = glm::vec3(originObject.at("x"), originObject.at("y"), originObject.at("z"));
-  if (node == "Cuboid") {
-    auto halfDimObj = json.at("halfDimensions");
-    auto halfDim = glm::vec3(halfDimObj.at("x"), halfDimObj.at("y"), halfDimObj.at("z"));
-    return std::make_unique<CuboidCsgShape>(origin, halfDim);
-  }
-  if (node == "Sphere") {
-    auto radius = json.at("radius");
-    return std::make_unique<SphereCsgShape>(origin, radius);
-  }
-  if (node == "Cone") {
-    auto constantsObj = json.at("Constants");
-    auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
-    return std::make_unique<ConeCsgShape>(origin, constants);
-  }
-  if (node == "Elipsoid") {
-    auto constantsObj = json.at("Constants");
-    auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
-    return std::make_unique<ElipsoidCsgShape>(origin, constants);
-  }
-  if (node == "Cylinder") {
-    auto constantsObj = json.at("Constants");
-    auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
-    auto axis = json.at("Axis");
-    return std::make_unique<CylinderCsgShape>(origin, constants, Shapes::string2enum(axis));
+  if (node == "Shape") {
+    auto type = string2enumShape(json.at("type"));
+    auto originObject = json.at("origin");
+    auto origin = glm::vec3(originObject.at("x"), originObject.at("y"), originObject.at("z"));
+    if (type == BaseCsgShape::ShapeType::CUBOID) {
+      auto halfDimObj = json.at("halfDimensions");
+      auto halfDim = glm::vec3(halfDimObj.at("x"), halfDimObj.at("y"), halfDimObj.at("z"));
+      return std::make_unique<CuboidCsgShape>(origin, halfDim);
+    }
+    if (type == BaseCsgShape::ShapeType::SPHERE) {
+      auto radius = json.at("radius");
+      return std::make_unique<SphereCsgShape>(origin, radius);
+    }
+    if (type == BaseCsgShape::ShapeType::CONE) {
+      auto constantsObj = json.at("Constants");
+      auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
+      return std::make_unique<ConeCsgShape>(origin, constants);
+    }
+    if (type == BaseCsgShape::ShapeType::ELIPSOID) {
+      auto constantsObj = json.at("Constants");
+      auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
+      return std::make_unique<ElipsoidCsgShape>(origin, constants);
+    }
+    if (type == BaseCsgShape::ShapeType::CYLINDER) {
+      auto constantsObj = json.at("Constants");
+      auto constants = glm::vec3(constantsObj.at("x"), constantsObj.at("y"), constantsObj.at("z"));
+      auto axis = json.at("Axis");
+      return std::make_unique<CylinderCsgShape>(origin, constants, Shapes::string2enum(axis));
+    }
   }
 }
 
